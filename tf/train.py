@@ -112,7 +112,7 @@ def main():
     with tf.Session() as sess:
         # saver.restore(sess, "/tmp/model.ckpt")
         sess.run(init)
-        for i in range(1):
+        for i in range(10000):
 
             _, costs = sess.run([optimizer, cost], feed_dict={X_train : X_train_origin,Y_train: Y_train_origin})
             print(costs)
