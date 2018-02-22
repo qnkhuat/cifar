@@ -89,6 +89,39 @@ def forward_prop(X_train,W1,W2):
     return Z3
 
 
+# GRADED FUNCTION: random_mini_batches
+
+def random_mini_batches(X, Y, mini_batch_size = 64):
+
+    m = X.shape[1]                  # number of training examples
+    mini_batches = []
+
+    # Step 1: Shuffle (X, Y)
+    permutation = list(np.random.permutation(m))
+    shuffled_X = X[:, permutation]
+    shuffled_Y = Y[:, permutation].reshape((1,m))
+
+    # Step 2: Partition (shuffled_X, shuffled_Y). Minus the end case.
+    num_complete_minibatches = math.floor(m/mini_batch_size) # number of mini batches of size mini_batch_size in your partitionning
+    for k in range(0, num_complete_minibatches):
+        ### START CODE HERE ### (approx. 2 lines)
+        mini_batch_X = shuffled_X[:,k * mini_batch_size:(k + 1) * mini_batch_size]
+        mini_batch_Y = shuffled_Y[:,k * mini_batch_size:(k + 1) * mini_batch_size]
+        ### END CODE HERE ###
+        mini_batch = (mini_batch_X, mini_batch_Y)
+        mini_batches.append(mini_batch)
+
+    # Handling the end case (last mini-batch < mini_batch_size)
+    if m % mini_batch_size != 0:
+        ### START CODE HERE ### (approx. 2 lines)
+        end = m - mini_batch_size * math.floor(m / mini_batch_size)
+        mini_batch_X = shuffled_X[:,num_complete_minibatches * mini_batch_size:]
+        mini_batch_Y = shuffled_Y[:,num_complete_minibatches * mini_batch_size:]
+        ### END CODE HERE ###
+        mini_batch = (mini_batch_X, mini_batch_Y)
+        mini_batches.append(mini_batch)
+
+    return mini_batches
 
 def main():
 
@@ -104,26 +137,40 @@ def main():
 
     Z3 = forward_prop(X_train, W1, W2)
     cost = compute_cost(Z3, Y_train)
-    optimizer = tf.train.AdamOptimizer(learning_rate = 0.0001).minimize(cost)
+    optimizer = tf.train.AdamOptimizer(learning_rate = 0.01).minimize(cost)
+
+    m=X_train_origin.shape[0]
+    mini_batch_size=64
 
 
     init = tf.global_variables_initializer()
-    # saver = tf.train.Saver()
+    saver = tf.train.Saver()
     with tf.Session() as sess:
-        # saver.restore(sess, "/tmp/model.ckpt")
         sess.run(init)
-        for i in range(10000):
+        ckpt = tf.train.get_checkpoint_state('./tmp/')
+        saver.restore(sess, ckpt.model_checkpoint_path)
 
+        for i in range(10):
             _, costs = sess.run([optimizer, cost], feed_dict={X_train : X_train_origin,Y_train: Y_train_origin})
             print(costs)
 
-        # saved=saver.save(sess,"tmp/model.ckpt")
+        # for i in range(10):
+        #     minibatch_cost = 0.
+        #     num_minibatches = int(m / minibatch_size)
+        #     minibatches = random_mini_batches(X_train_origin, Y_train, mini_batch_size)
+        #     for minibatch in minibatches:
+        #         (minibatch_X, minibatch_Y) = minibatch
+        #         _, costs = sess.run([optimizer, cost], feed_dict={X_train : minibatch_X,Y_train: minibatch_Y})
+        #         minibatch_cost += temp_cost / num_minibatches
+        #         print(costs)
+
+        saved=saver.save(sess,"./tmp/model.ckpt",global_step=1)
         predict_op = tf.argmax(Z3, 1)
         correct_prediction = tf.equal(predict_op, tf.argmax(Y_train, 1))
 
         # Calculate accuracy on the test set
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-        print(accuracy)
+
         train_accuracy = accuracy.eval({X_train : X_train_origin,Y_train: Y_train_origin})
         test_accuracy = accuracy.eval({X_train : X_test_origin,Y_train: Y_test_origin})
         print("Train Accuracy:", train_accuracy)
