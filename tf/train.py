@@ -139,6 +139,8 @@ def main():
 
     m=X_train_origin.shape[0]
     minibatch_size=64
+
+    #open costs file
     costs=np.loadtxt('data/costs.txt', dtype=float)
 
     init = tf.global_variables_initializer()
@@ -171,13 +173,16 @@ def main():
                 _, temp_cost = sess.run([optimizer, cost], feed_dict={X_train : minibatch_X,Y_train: minibatch_Y})
                 minibatch_cost += temp_cost / num_minibatches
 
-            costs.append(minibatch_cost)
-
+            costs=np.append(costs,minibatch_cost)
             end_time =time.time()
             total_time = end_time - start_time
+
             if i%1==0:
                 print("cost after {} iters : {} in {} each".format(i,minibatch_cost,total_time))
+
                 saver.save(sess,"./tmp/model.ckpt",global_step=1)
+                np.savetxt('data/costs.txt',costs,fmt='%1.16f')
+
         predict_op = tf.argmax(Z3, 1)
         correct_prediction = tf.equal(predict_op, tf.argmax(Y_train, 1))
 
