@@ -44,12 +44,12 @@
     <favorites_list name="cifar" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+    <leaf>
       <file leaf-file-name="train.py" pinned="true" current-in-tab="true">
         <entry file="remoteDeploymentFS://&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/cifar/tf/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="159" column="16" lean-forward="false" selection-start-line="159" selection-start-column="16" selection-end-line="159" selection-end-column="16" />
+            <state relative-caret-position="364">
+              <caret line="164" column="0" lean-forward="true" selection-start-line="164" selection-start-column="0" selection-end-line="164" selection-end-column="0" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>

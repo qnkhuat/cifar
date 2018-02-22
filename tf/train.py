@@ -3,6 +3,7 @@ import numpy as np
 from tensorflow.python.framework import ops
 import matplotlib.pyplot as plt
 import math
+import time
 files_train={"../train/data/data_batch_1","../train/data/data_batch_2","../train/data/data_batch_3"}
 files_test={"../train/data/test_batch"}
 
@@ -149,23 +150,33 @@ def main():
             saver.restore(sess, ckpt.model_checkpoint_path)
         except:
             print("No checkpoint found")
+
+        for i in range(1000):
+            start_time =time.time()
+            _, costs = sess.run([optimizer, cost], feed_dict={X_train : X_train_origin,Y_train: Y_train_origin})
+            end_time =time.time()
+            total_time = end_time -start_time
+            print("cost after each 1 iters : {} in {}".format(costs,total_time))
+            saver.save(sess,"./tmp/model.ckpt",global_step=1)
+            
         #
-        # for i in range(1000):
-        #     _, costs = sess.run([optimizer, cost], feed_dict={X_train : X_train_origin,Y_train: Y_train_origin})
-        #     print(costs)
+        # for i in range(10):
+        #     start_time =time.time()
+        #
+        #     minibatch_cost = 0.
+        #     num_minibatches = int(m / minibatch_size)
+        #     minibatches = random_mini_batches(X_train_origin, Y_train_origin, minibatch_size)
+        #     for minibatch in minibatches:
+        #         (minibatch_X, minibatch_Y) = minibatch
+        #         _, temp_cost = sess.run([optimizer, cost], feed_dict={X_train : minibatch_X,Y_train: minibatch_Y})
+        #         minibatch_cost += temp_cost / num_minibatches
+        #
+        #     costs.append(minibatch_cost)
+        #     end_time =time.time()
+        #     total_time = end_time -start_time
+        #     print("cost after each 1 iters : {} in {}".format(minibatch_cost,total_time))
+        #     saver.save(sess,"./tmp/model.ckpt",global_step=1)
 
-        for i in range(10):
-            minibatch_cost = 0.
-            num_minibatches = int(m / minibatch_size)
-            minibatches = random_mini_batches(X_train_origin, Y_train_origin, minibatch_size)
-            for minibatch in minibatches:
-                (minibatch_X, minibatch_Y) = minibatch
-                _, temp_cost = sess.run([optimizer, cost], feed_dict={X_train : minibatch_X,Y_train: minibatch_Y})
-                minibatch_cost += temp_cost / num_minibatches
-
-            costs.append(minibatch_cost)
-            print("cost after each 10 iters",minibatch_cost)
-            saved=saver.save(sess,"./tmp/model.ckpt",global_step=1)
         predict_op = tf.argmax(Z3, 1)
         correct_prediction = tf.equal(predict_op, tf.argmax(Y_train, 1))
 
