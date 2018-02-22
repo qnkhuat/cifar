@@ -147,8 +147,11 @@ def main():
     saver = tf.train.Saver()
     with tf.Session() as sess:
         sess.run(init)
-        ckpt = tf.train.get_checkpoint_state('./tmp/')
-        saver.restore(sess, ckpt.model_checkpoint_path)
+        try :
+            ckpt = tf.train.get_checkpoint_state('./tmp/')
+            saver.restore(sess, ckpt.model_checkpoint_path)
+        except:
+            print("No checkpoint found")
 
         for i in range(1000):
             _, costs = sess.run([optimizer, cost], feed_dict={X_train : X_train_origin,Y_train: Y_train_origin})
