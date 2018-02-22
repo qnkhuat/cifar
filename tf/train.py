@@ -149,25 +149,6 @@ def main():
             saver.restore(sess, ckpt.model_checkpoint_path)
         except:
             print("No checkpoint found")
-<<<<<<< HEAD
-
-        for i in range(100):
-            _, costs = sess.run([optimizer, cost], feed_dict={X_train : X_train_origin,Y_train: Y_train_origin})
-            print(costs)
-            if i % 10 == 0:
-                saver.save(sess, "./tmp/model.ckpt", global_step=1)
-
-        # for i in range(10):
-        #     minibatch_cost = 0.
-        #     num_minibatches = int(m / minibatch_size)
-        #     minibatches = random_mini_batches(X_train_origin, Y_train, mini_batch_size)
-        #     for minibatch in minibatches:
-        #         (minibatch_X, minibatch_Y) = minibatch
-        #         _, costs = sess.run([optimizer, cost], feed_dict={X_train : minibatch_X,Y_train: minibatch_Y})
-        #         minibatch_cost += temp_cost / num_minibatches
-        #         print(costs)
-
-=======
         #
         # for i in range(1000):
         #     _, costs = sess.run([optimizer, cost], feed_dict={X_train : X_train_origin,Y_train: Y_train_origin})
@@ -184,8 +165,8 @@ def main():
 
             costs.append(minibatch_cost)
             print("cost after each 10 iters",minibatch_cost)
-            saved=saver.save(sess,"./tmp/model.ckpt",global_step=1)
->>>>>>> a6e90a467021c1b561790f698e14f1fa13ca662b
+            saver.save(sess,"./tmp/model.ckpt",global_step=1)
+
         predict_op = tf.argmax(Z3, 1)
         correct_prediction = tf.equal(predict_op, tf.argmax(Y_train, 1))
 
