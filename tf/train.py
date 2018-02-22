@@ -172,17 +172,12 @@ def main():
                 minibatch_cost += temp_cost / num_minibatches
 
             costs.append(minibatch_cost)
-<<<<<<< HEAD
-            print("cost after each 10 iters",minibatch_cost)
-            saver.save(sess,"./tmp/model.ckpt",global_step=1)
-=======
+
             end_time =time.time()
             total_time = end_time - start_time
             if i%10==0:
                 print("cost after each 10 iters : {} in {} each".format(minibatch_cost,total_time))
                 saver.save(sess,"./tmp/model.ckpt",global_step=1)
->>>>>>> 7e823ba16c56f9c4dcb5ae6e66ea7558e378205c
-
         predict_op = tf.argmax(Z3, 1)
         correct_prediction = tf.equal(predict_op, tf.argmax(Y_train, 1))
 
