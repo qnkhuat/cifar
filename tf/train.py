@@ -139,7 +139,7 @@ def main():
 
     m=X_train_origin.shape[0]
     minibatch_size=64
-    costs=[]
+    costs=np.loadtxt('data/costs.txt', dtype=float)
 
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
@@ -160,10 +160,10 @@ def main():
         #     saver.save(sess,"./tmp/model.ckpt",global_step=1)
         #
         #
-        for i in range(1000):
+        for i in range(100000):
             start_time =time.time()
 
-            minibatch_cost = 0.
+            minibatch_cost = 0
             num_minibatches = int(m / minibatch_size)
             minibatches = random_mini_batches(X_train_origin, Y_train_origin, minibatch_size)
             for minibatch in minibatches:
@@ -175,8 +175,8 @@ def main():
 
             end_time =time.time()
             total_time = end_time - start_time
-            if i%10==0:
-                print("cost after each 10 iters : {} in {} each".format(minibatch_cost,total_time))
+            if i%1==0:
+                print("cost after {} iters : {} in {} each".format(i,minibatch_cost,total_time))
                 saver.save(sess,"./tmp/model.ckpt",global_step=1)
         predict_op = tf.argmax(Z3, 1)
         correct_prediction = tf.equal(predict_op, tf.argmax(Y_train, 1))
