@@ -56,11 +56,11 @@ def create_placeholders(n_H,n_W,n_C,n_y):
     return X_train,Y_train
 
 def prepare_params(X_train,X_test):
-    regularizer = tf.contrib.layers.l2_regularizer(scale=0.1)
-    W1 = tf.get_variable("W1", [4, 4, 3, 8], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizer)#shape [filter_height, filter_width, in_channels, out_channels]
-    W2 = tf.get_variable("W2", [4, 4, 8, 16], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizer)#shape [filter_height, filter_width, in_channels, out_channels]
-    W3 = tf.get_variable("W3", [4, 4, 16, 32], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizer)# shape [filter_height, filter_width, in_channels, out_channels]
-    W4 = tf.get_variable("W4", [4, 4, 32, 64], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizer)# shape [filter_height, filter_width, in_channels, out_channels]
+    regularizers = tf.contrib.layers.l2_regularizer(scale=0.1)
+    W1 = tf.get_variable("W1", [4, 4, 3, 8], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizers)#shape [filter_height, filter_width, in_channels, out_channels]
+    W2 = tf.get_variable("W2", [4, 4, 8, 16], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizers)#shape [filter_height, filter_width, in_channels, out_channels]
+    W3 = tf.get_variable("W3", [4, 4, 16, 32], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizers)# shape [filter_height, filter_width, in_channels, out_channels]
+    W4 = tf.get_variable("W4", [4, 4, 32, 64], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizers)# shape [filter_height, filter_width, in_channels, out_channels]
 
 
     m_train,n_H_train,n_W_train,n_C_train=X_train.shape
@@ -89,25 +89,25 @@ def forward_prop(X_train,weights):
     W3 = weights['W3']
     W4 = weights['W4']
 
-    Z1=tf.nn.conv2d(X_train,W1,strides=[1,1,1,1],padding='SAME',activation=tf.nn.relu)
+    Z1=tf.nn.conv2d(X_train,W1,strides=[1,1,1,1],padding='SAME')
     A1=tf.nn.relu(Z1)
 
-    Z2=tf.nn.conv2d(A1,W2,strides=[1,2,2,1],padding="SAME",activation=tf.nn.relu)
+    Z2=tf.nn.conv2d(A1,W2,strides=[1,2,2,1],padding="SAME")
     A2=tf.nn.relu(Z2)
-    P2=tf.nn.max_pool(A2,ksize=[1,4,4,1],strides = [1,4,4,1], padding = 'SAME',activation=tf.nn.relu)
+    P2=tf.nn.max_pool(A2,ksize=[1,4,4,1],strides = [1,4,4,1], padding = 'SAME')
 
-    Z3 = tf.nn.conv2d(P2, W3, strides=[1, 2, 2, 1], padding="SAME",activation=tf.nn.relu)
+    Z3 = tf.nn.conv2d(P2, W3, strides=[1, 2, 2, 1], padding="SAME")
     A3 = tf.nn.relu(Z3)
 
-    Z4 = tf.nn.conv2d(A3, W4, strides=[1, 4, 4, 1], padding="SAME",activation=tf.nn.relu)
+    Z4 = tf.nn.conv2d(A3, W4, strides=[1, 4, 4, 1], padding="SAME")
     A4 = tf.nn.relu(Z4)
     P4 = tf.nn.max_pool(A4, ksize=[1, 4, 4, 1], strides=[1, 4, 4, 1], padding='SAME')
 
     P5 = tf.contrib.layers.flatten(P4)
-    Z5 = tf.contrib.layers.fully_connected(P5, 10, activation_fn=None)
-    # Z5 = tf.contrib.layers.fully_connected(P5, 10, activation_fn=tf.nn.relu)
-    # Z6 = tf.contrib.layers.fully_connected(Z5, 10, activation_fn=None)
-    return Z5
+    # Z5 = tf.contrib.layers.fully_connected(P5, 10, activation_fn=None)
+    Z5 = tf.contrib.layers.fully_connected(P5, 10, activation_fn=tf.nn.relu)
+    Z6 = tf.contrib.layers.fully_connected(Z5, 10, activation_fn=None)
+    return Z6
     #conv / relu / conv / relu / pool / conv / relu / conv / relu / pool / fc
 
 # GRADED FUNCTION: random_mini_batches
@@ -132,9 +132,9 @@ def random_mini_batches(X, Y, mini_batch_size = 64):
     # Handling the end case (last mini-batch < mini_batch_size)
     if m % mini_batch_size != 0:
         ### START CODE HERE ### (approx. 2 lines)
-        end = m - mini_batch_size * math.floor(m / mini_batch_size)
-        mini_batch_X = shuffled_X[num_complete_minibatches * mini_batch_size:,:]
-        mini_batch_Y = shuffled_Y[num_complete_minibatches * mini_batch_size:,:]
+        # end = m - mini_batch_size * math.floor(m / mini_batch_size)
+        mini_batch_X = shuffled_X[num_complete_minibatches * mini_batch_size: ,:]
+        mini_batch_Y = shuffled_Y[num_complete_minibatches * mini_batch_size: ,:]
         ### END CODE HERE ###
         mini_batch = (mini_batch_X, mini_batch_Y)
         mini_batches.append(mini_batch)
@@ -158,7 +158,10 @@ def main():
     minibatch_size = 64
 
     # open costs file
-    costs = np.loadtxt('data/costs.txt', dtype=float)
+    costs = np.loadtxt('data/costs2.txt', dtype=float)
+    trains = np.loadtxt('data/trains2.txt', dtype=float)
+    tests = np.loadtxt('data/tests2.txt', dtype=float)
+
 
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
@@ -180,7 +183,7 @@ def main():
         #     saver.save(sess,"./tmp/model.ckpt",global_step=1)
         #
         #
-        for i in range(1):
+        for i in range(10000):
             start_time =time.time()
 
             minibatch_cost = 0
@@ -200,16 +203,25 @@ def main():
             if i%100==0:
                 print("cost after {} iters : {} in {} each".format(i,minibatch_cost,total_time))
                 saver.save(sess,"./tmp2/model.ckpt",global_step=1)
-                np.savetxt('data/costs2.txt',costs,fmt='%1.16f')
-        print("cost after {} iters : {} in {} each".format(i, minibatch_cost, total_time))
-        predict_op = tf.argmax(Z4, 1)
-        correct_prediction = tf.equal(predict_op, tf.argmax(Y_train, 1))
 
-        # Calculate accuracy on the test set
-        accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+                predict_op = tf.argmax(Z4, 1)
+                correct_prediction = tf.equal(predict_op, tf.argmax(Y_train, 1))
 
-        train_accuracy = accuracy.eval({X_train : X_train_origin,Y_train: Y_train_origin})
-        test_accuracy = accuracy.eval({X_train : X_test_origin,Y_train: Y_test_origin})
+                # Calculate accuracy on the test set
+                accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+
+                train_accuracy = accuracy.eval({X_train : X_train_origin,Y_train: Y_train_origin})
+                test_accuracy = accuracy.eval({X_train : X_test_origin,Y_train: Y_test_origin})
+
+                trains = np.append(trains, train_accuracy)
+                tests = np.append(tests, test_accuracy)
+
+                np.savetxt('data/costs2.txt', costs, fmt='%1.16f')
+                np.savetxt('data/trains2.txt', trains, fmt='%1.16f')
+                np.savetxt('data/costs2.txt',tests,fmt='%1.16f')
+
+
+
         print("Train Accuracy:", train_accuracy)
         print("Test Accuracy:", test_accuracy)
 
