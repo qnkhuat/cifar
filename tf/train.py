@@ -173,6 +173,7 @@ def main():
                 minibatch_cost += temp_cost / num_minibatches
 
             costs=np.append(costs,minibatch_cost)
+
             end_time =time.time()
             total_time = end_time - start_time
             if i%100==0:

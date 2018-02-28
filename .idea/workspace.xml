@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd98d4ae-6742-4c2a-9e58-86fe36e06d29" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tf/train.py" afterPath="$PROJECT_DIR$/tf/train.py" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/tensorflow-mnist-tutorial/mnist_1.0_softmax.py" afterPath="$USER_HOME$/tensorflow-mnist-tutorial/mnist_1.0_softmax.py" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/tensorflow-mnist-tutorial/mnist_2.0_five_layers_sigmoid.py" afterPath="$USER_HOME$/tensorflow-mnist-tutorial/mnist_2.0_five_layers_sigmoid.py" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/tensorflow-mnist-tutorial/mnist_2.1_five_layers_relu_lrdecay.py" afterPath="$USER_HOME$/tensorflow-mnist-tutorial/mnist_2.1_five_layers_relu_lrdecay.py" />
@@ -40,12 +42,22 @@
     <favorites_list name="cifar" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="train.py" pinned="true" current-in-tab="true">
-        <entry file="remoteDeploymentFS://&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/cifar/tf/train.py">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="create_annoset.py" pinned="true" current-in-tab="false">
+        <entry file="remoteDeploymentFS://&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/scripts/create_annoset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="409">
-              <caret line="178" column="35" lean-forward="true" selection-start-line="178" selection-start-column="35" selection-end-line="178" selection-end-column="35" />
+            <state relative-caret-position="-1123">
+              <caret line="11" column="39" lean-forward="true" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="train2.py" pinned="true" current-in-tab="true">
+        <entry file="remoteDeploymentFS://&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/cifar/tf/train2.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="305">
+              <caret line="179" column="63" lean-forward="true" selection-start-line="179" selection-start-column="63" selection-end-line="179" selection-end-column="63" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -64,36 +76,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>input</find>
-      <find>data_dir</find>
-      <find>argsargs</find>
-      <find>xml</find>
-      <find>visual</find>
-      <find>frame_no</find>
-      <find>out</find>
-      <find>create_models_tiny</find>
-      <find>DataLoader</find>
-      <find>deo</find>
-      <find>scaled</find>
-      <find>cv2.resize(im, (image_size[0], image_size[1]))</find>
-      <find>froward_image</find>
-      <find>print</find>
-      <find>hey</find>
-      <find>ok&quot;</find>
-      <find>process_splits</find>
-      <find>show</find>
-      <find>here</find>
-      <find>train_net</find>
-      <find>chan</find>
-      <find>get_training_roidb</find>
-      <find>roidb</find>
-      <find>rdl_roidb</find>
-      <find>prepare_roidb</find>
-      <find>print('detection finished')</find>
-      <find>restore</find>
-      <find>output_dir</find>
-      <find>saver</find>
-      <find>Loading network</find>
+      <find>text</find>
+      <find>for i in xrange(wordBB.shape[-1])</find>
+      <find>bndbox</find>
+      <find>fname</find>
+      <find>forward_prop</find>
+      <find>/mhliao</find>
+      <find>text_polygon</find>
+      <find>NetNet</find>
+      <find>Net</find>
+      <find>NMS</find>
+      <find>nms</find>
+      <find>save_dir</find>
+      <find>prepare_params</find>
+      <find>mhliao</find>
+      <find>detection_out</find>
+      <find>forward</find>
+      <find>prepare_networkprepare_network</find>
+      <find>text_polygon_precise_fix_order_384x384</find>
+      <find>jobs</find>
+      <find>caffe</find>
+      <find>prepare_network</find>
+      <find>job_dir</find>
+      <find>config</find>
+      <find>multibox_loss_param</find>
+      <find>train_data</find>
+      <find>train</find>
+      <find>filename</find>
+      <find>f</find>
+      <find>out_dir</find>
+      <find>name</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -106,18 +118,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/importLabel.py" />
-        <option value="$PROJECT_DIR$/label/train.csv" />
-        <option value="$PROJECT_DIR$/label/orderTrainSet.csv" />
-        <option value="$PROJECT_DIR$/train/y.csv" />
-        <option value="$PROJECT_DIR$/train/data2.csv" />
-        <option value="$PROJECT_DIR$/train/data3.csv" />
-        <option value="$PROJECT_DIR$/addLabel.py" />
-        <option value="$PROJECT_DIR$/CNN.py" />
-        <option value="$PROJECT_DIR$/convert.py" />
-        <option value="$PROJECT_DIR$/convol.py" />
-        <option value="$PROJECT_DIR$/read.py" />
-        <option value="$PROJECT_DIR$/staircase.py" />
         <option value="$PROJECT_DIR$/../staircase.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/CNN/test.py" />
@@ -140,20 +140,35 @@
         <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/dts/demo.py" />
         <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/dts/utils.py" />
         <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/dts/demo2.py" />
-        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/export.py" />
-        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/genSize.py" />
-        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/savegt.py" />
-        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/savejson.py" />
         <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/ctpn/prepare_training_data/split_label.py" />
         <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/ctpn/prepare_training_data/ToVoc.py" />
         <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/ctpn/lib/fast_rcnn/train.py" />
         <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/ctpn/lib/roi_data_layer/roidb.py" />
         <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox2/examples/text/demo.py" />
-        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/examples/text/demo.py" />
         <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/ctpn/lib/fast_rcnn/train.py" />
         <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/ctpn/ctpn/demo.py" />
         <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/ctpn/demo.py" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/tbb/examples/text/models/deploy.prototxt" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/tbb/examples/text/demo.py" />
+        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/.git/genpath.py" />
+        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/cifar/tf/data/costs_before_change_lr.txt" />
         <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/cifar/tf/train.py" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/examples/text/models/deploy.prototxt" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/examples/text/nms.py" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/examples/text/demo.py" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/examples/text/train.py" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/train.py" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/examples/text/modelConfig.py" />
+        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/export.py" />
+        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/genSize.py" />
+        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/savegt.py" />
+        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/savejson.py" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/modelConfig.py" />
+        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/genpath.py" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/data/text/create_data.sh" />
+        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/genxml.py" />
+        <option value="&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/scripts/create_annoset.py" />
+        <option value="&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/cifar/tf/train2.py" />
       </list>
     </option>
   </component>
@@ -163,10 +178,10 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="1440" />
-    <option name="height" value="873" />
+    <option name="height" value="162" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -348,7 +363,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="873" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="872" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -356,8 +371,8 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.49722221" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3770287" sideWeight="0.48472223" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31491002" sideWeight="0.49713877" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21180555" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16229713" sideWeight="0.49713877" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18263888" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15138888" sideWeight="0.49253732" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -384,8 +399,8 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32904884" sideWeight="0.49722221" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3770287" sideWeight="0.48472223" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31491002" sideWeight="0.49713877" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21180555" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16229713" sideWeight="0.49713877" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Remote Host" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21180555" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15138888" sideWeight="0.49253732" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -424,8 +439,23 @@
           <line>94</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>remoteDeploymentFS://&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/examples/text/demo.py</url>
+          <line>51</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>remoteDeploymentFS://&lt;71cdb589-eee3-418c-8cd5-2a010bb9781f&gt;/textbox/examples/text/demo.py</url>
+          <line>40</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>remoteDeploymentFS://&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/SynthText/savegt.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="7" />
+      <option name="time" value="11" />
     </breakpoint-manager>
     <watches-manager />
   </component>
