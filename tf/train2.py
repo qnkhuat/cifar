@@ -56,8 +56,12 @@ def create_placeholders(n_H,n_W,n_C,n_y):
     return X_train,Y_train
 
 def prepare_params(X_train,X_test):
-    W1 = tf.get_variable("W1", [4, 4, 3, 8], initializer=tf.contrib.layers.xavier_initializer())#shape [filter_height, filter_width, in_channels, out_channels]
-    W2 = tf.get_variable("W2", [4, 4, 8, 16], initializer=tf.contrib.layers.xavier_initializer())#shape [filter_height, filter_width, in_channels, out_channels]
+    regularizer = tf.contrib.layers.l2_regularizer(scale=0.1)
+    W1 = tf.get_variable("W1", [4, 4, 3, 8], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizer)#shape [filter_height, filter_width, in_channels, out_channels]
+    W2 = tf.get_variable("W2", [4, 4, 8, 16], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizer)#shape [filter_height, filter_width, in_channels, out_channels]
+    W3 = tf.get_variable("W3", [4, 4, 16, 32], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizer)# shape [filter_height, filter_width, in_channels, out_channels]
+    W4 = tf.get_variable("W4", [4, 4, 32, 64], initializer=tf.contrib.layers.xavier_initializer(),regularizer=regularizer)# shape [filter_height, filter_width, in_channels, out_channels]
+
 
     m_train,n_H_train,n_W_train,n_C_train=X_train.shape
     X_train,Y_train=create_placeholders(n_H_train,n_W_train,n_C_train,10)
@@ -66,29 +70,45 @@ def prepare_params(X_train,X_test):
     m_test,n_H_test,n_W_test,n_C_test=X_test.shape
     X_test, Y_test = create_placeholders(n_H_test, n_W_test, n_C_test, 10)
 
-
-    return X_train,Y_train,X_test,Y_test,W1,W2
+    weights = {
+        'W1':W1,
+        'W2': W2,
+        'W3': W3,
+        'W4':W4
+    }
+    return X_train,Y_train,X_test,Y_test,weights
 
 
 def compute_cost(Z3,Y):
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=Z3, labels=Y))
     return cost
 
-def forward_prop(X_train,W1,W2):
+def forward_prop(X_train,weights):
+    W1 = weights['W1']
+    W2 = weights['W2']
+    W3 = weights['W3']
+    W4 = weights['W4']
 
-
-    Z1=tf.nn.conv2d(X_train,W1,strides=[1,1,1,1],padding='SAME')
+    Z1=tf.nn.conv2d(X_train,W1,strides=[1,1,1,1],padding='SAME',activation=tf.nn.relu)
     A1=tf.nn.relu(Z1)
-    P1=tf.nn.max_pool(A1,ksize = [1,8,8,1], strides = [1,8,8,1], padding = 'SAME')
 
-    Z2=tf.nn.conv2d(P1,W2,strides=[1,2,2,1],padding="SAME")
+    Z2=tf.nn.conv2d(A1,W2,strides=[1,2,2,1],padding="SAME",activation=tf.nn.relu)
     A2=tf.nn.relu(Z2)
-    P2=tf.nn.max_pool(A2,ksize=[1,4,4,1],strides = [1,4,4,1], padding = 'SAME')
+    P2=tf.nn.max_pool(A2,ksize=[1,4,4,1],strides = [1,4,4,1], padding = 'SAME',activation=tf.nn.relu)
 
-    P2 = tf.contrib.layers.flatten(P2)
-    Z3 = tf.contrib.layers.fully_connected(P2, 10, activation_fn=None)
-    return Z3
+    Z3 = tf.nn.conv2d(P2, W3, strides=[1, 2, 2, 1], padding="SAME",activation=tf.nn.relu)
+    A3 = tf.nn.relu(Z3)
 
+    Z4 = tf.nn.conv2d(A3, W4, strides=[1, 4, 4, 1], padding="SAME",activation=tf.nn.relu)
+    A4 = tf.nn.relu(Z4)
+    P4 = tf.nn.max_pool(A4, ksize=[1, 4, 4, 1], strides=[1, 4, 4, 1], padding='SAME')
+
+    P5 = tf.contrib.layers.flatten(P4)
+    Z5 = tf.contrib.layers.fully_connected(P5, 10, activation_fn=None)
+    # Z5 = tf.contrib.layers.fully_connected(P5, 10, activation_fn=tf.nn.relu)
+    # Z6 = tf.contrib.layers.fully_connected(Z5, 10, activation_fn=None)
+    return Z5
+    #conv / relu / conv / relu / pool / conv / relu / conv / relu / pool / fc
 
 # GRADED FUNCTION: random_mini_batches
 
@@ -123,32 +143,30 @@ def random_mini_batches(X, Y, mini_batch_size = 64):
 
 def main():
 
-    X_train_origin, Y_train_origin, X_test_origin,Y_test_origin =loadData()
+
+    X_train_origin, Y_train_origin, X_test_origin, Y_test_origin = loadData()
 
     ops.reset_default_graph()
 
-    X_train, Y_train, X_test, Y_test, W1, W2 = prepare_params(X_train_origin, X_test_origin)
+    X_train, Y_train, X_test, Y_test, weights = prepare_params(X_train_origin, X_test_origin)
 
-    m_train,n_H_train,n_W_train,n_C_train=X_train.shape
+    Z4 = forward_prop(X_train, weights)
+    cost = compute_cost(Z4, Y_train)
+    optimizer = tf.train.AdamOptimizer(learning_rate=0.0001).minimize(cost)
 
-    X,Y=create_placeholders(n_H_train,n_W_train,n_C_train,10)
+    m = X_train_origin.shape[0]
+    minibatch_size = 64
 
-    Z3 = forward_prop(X_train, W1, W2)
-    cost = compute_cost(Z3, Y_train)
-    optimizer = tf.train.AdamOptimizer(learning_rate = 0.0001).minimize(cost)
-
-    m=X_train_origin.shape[0]
-    minibatch_size=64
-
-    #open costs file
-    costs=np.loadtxt('data/costs.txt', dtype=float)
+    # open costs file
+    costs = np.loadtxt('data/costs.txt', dtype=float)
 
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
-    with tf.Session() as sess:
+
+    with tf.Session(config=tf.ConfigProto(log_device_placement=False)) as sess:
         sess.run(init)
         try :
-            ckpt = tf.train.get_checkpoint_state('./tmp/')
+            ckpt = tf.train.get_checkpoint_state('./tmp2/')
             saver.restore(sess, ckpt.model_checkpoint_path)
         except:
             print("No checkpoint found")
@@ -168,23 +186,23 @@ def main():
             minibatch_cost = 0
             num_minibatches = int(m / minibatch_size)
             minibatches = random_mini_batches(X_train_origin, Y_train_origin, minibatch_size)
+
             for minibatch in minibatches:
                 (minibatch_X, minibatch_Y) = minibatch
                 _, temp_cost = sess.run([optimizer, cost], feed_dict={X_train : minibatch_X,Y_train: minibatch_Y})
                 minibatch_cost += temp_cost / num_minibatches
 
             costs=np.append(costs,minibatch_cost)
-
             end_time =time.time()
             total_time = end_time - start_time
 
+
             if i%100==0:
                 print("cost after {} iters : {} in {} each".format(i,minibatch_cost,total_time))
-
-                saver.save(sess,"./tmp/model.ckpt",global_step=1)
-                np.savetxt('data/costs.txt',costs,fmt='%1.16f')
-
-        predict_op = tf.argmax(Z3, 1)
+                saver.save(sess,"./tmp2/model.ckpt",global_step=1)
+                np.savetxt('data/costs2.txt',costs,fmt='%1.16f')
+        print("cost after {} iters : {} in {} each".format(i, minibatch_cost, total_time))
+        predict_op = tf.argmax(Z4, 1)
         correct_prediction = tf.equal(predict_op, tf.argmax(Y_train, 1))
 
         # Calculate accuracy on the test set
