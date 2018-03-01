@@ -105,9 +105,9 @@ def forward_prop(X_train,weights):
 
     P5 = tf.contrib.layers.flatten(P4)
     # Z5 = tf.contrib.layers.fully_connected(P5, 10, activation_fn=None)
-    Z5 = tf.contrib.layers.fully_connected(P5, 10, activation_fn=tf.nn.relu)
-    Z6 = tf.contrib.layers.fully_connected(Z5, 10, activation_fn=None)
-    return Z6
+    # Z5 = tf.contrib.layers.fully_connected(P5, 10, activation_fn=tf.nn.relu)
+    Z5 = tf.contrib.layers.fully_connected(P5, 10, activation_fn=None)
+    return Z5
     #conv / relu / conv / relu / pool / conv / relu / conv / relu / pool / fc
 
 # GRADED FUNCTION: random_mini_batches
@@ -173,16 +173,7 @@ def main():
             saver.restore(sess, ckpt.model_checkpoint_path)
         except:
             print("No checkpoint found")
-        #
-        # for i in range(1000):
-        #     start_time =time.time()
-        #     _, costs = sess.run([optimizer, cost], feed_dict={X_train : X_train_origin,Y_train: Y_train_origin})
-        #     end_time =time.time()
-        #     total_time = end_time -start_time
-        #     print("cost after each 1 iters : {} in {}".format(costs,total_time))
-        #     saver.save(sess,"./tmp/model.ckpt",global_step=1)
-        #
-        #
+
         for i in range(10000):
             start_time =time.time()
 
@@ -200,7 +191,7 @@ def main():
             total_time = end_time - start_time
 
 
-            if i%100==0:
+            if i%10==0:
                 print("cost after {} iters : {} in {} each".format(i,minibatch_cost,total_time))
                 saver.save(sess,"./tmp2/model.ckpt",global_step=1)
 
@@ -218,7 +209,7 @@ def main():
 
                 np.savetxt('data/costs2.txt', costs, fmt='%1.16f')
                 np.savetxt('data/trains2.txt', trains, fmt='%1.16f')
-                np.savetxt('data/costs2.txt',tests,fmt='%1.16f')
+                np.savetxt('data/tests2.txt',tests,fmt='%1.16f')
 
 
 
