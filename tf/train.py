@@ -7,10 +7,6 @@ import time
 files_train={"../train/data/data_batch_1","../train/data/data_batch_2","../train/data/data_batch_3","../train/data/data_batch_4","../train/data/data_batch_5"}
 files_test={"../train/data/test_batch"}
 
-_iter=1000
-_lr=0.001
-
-
 def loadData():
     X_train = np.zeros((len(files_train)*10000,3072))
     Y_train = np.zeros((len(files_train)*10000))
@@ -154,10 +150,10 @@ def load_txt(cost_dir,train_dir,test_dir):
     tests = np.loadtxt(test_dir, dtype=float)
     return costs,trains,tests
 
-def save_txt(costs,trains,tests):
-    np.savetxt('data/costs2.txt', costs, fmt='%1.16f')
-    np.savetxt('data/trains2.txt', trains, fmt='%1.16f')
-    np.savetxt('data/costs2.txt',tests,fmt='%1.16f')
+def save_txt(costs,trains,tests,cost_dir,train_dir,test_dir):
+    np.savetxt(cost_dir, costs, fmt='%1.16f')
+    np.savetxt(train_dir, trains, fmt='%1.16f')
+    np.savetxt(test_dir, tests,fmt='%1.16f')
 
 def predict(X_train_origin,Y_train_origin,X_test_origin,Y_test_origin,output,X_train,Y_train):
     predict_op = tf.argmax(output, 1)
@@ -183,13 +179,13 @@ def main():
 
     output = forward_prop(X_train, weights)
     cost = compute_cost(output, Y_train)
-    optimizer = tf.train.AdamOptimizer(learning_rate=_lr).minimize(cost)
+    optimizer = tf.train.AdamOptimizer(learning_rate=0.0001).minimize(cost)
 
     m = X_train_origin.shape[0]
     minibatch_size = 64
 
     #load data from txt
-    costs,trains,tests=load_txt('data/costs2.txt','data/trains2.txt','data/tests2.txt')
+    costs,trains,tests=load_txt('data/costs.txt','data/trains.txt','data/tests.txt')
 
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
@@ -202,7 +198,7 @@ def main():
         except:
             print("No checkpoint found")
 
-        for i in range(_iter):
+        for i in range(10000):
             start_time =time.time()
 
             minibatch_cost = 0
@@ -221,7 +217,6 @@ def main():
 
             if i%10==0:
 
-
                 saver.save(sess,"./checkpoint/model.ckpt",global_step=1)
 
                 train_accuracy,test_accuracy = predict(X_train_origin,Y_train_origin,X_test_origin,Y_test_origin,output,X_train,Y_train)
@@ -229,8 +224,12 @@ def main():
                 trains,tests=append_data(trains,tests,train_accuracy,test_accuracy)
 
                 #save data to txt
-                save_txt(costs,trains,tests)
-                print("cost after {} iters : {} in {} each with train accuracy = {} and test accuracy = {} ".format(i, minibatch_cost, total_time,train_accuracy,test_accuracy))
+                save_txt(costs,trains,tests,'data/costs.txt','data/trains.txt','data/tests.txt')
+                print("cost after {} iters : {} in {} each with train accuracy = {} and test accuracy = {} ".format(i,
+                                                                                                                    minibatch_cost,
+                                                                                                                    total_time,
+                                                                                                                    train_accuracy,
+                                                                                                                    test_accuracy))
 
         print("Train Accuracy:", train_accuracy)
         print("Test Accuracy:", test_accuracy)
