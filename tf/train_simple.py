@@ -42,13 +42,13 @@ def loadData():
     X_test=X_test/255
 
     #reshape and one hot data
-    X_train = X_train.reshape((len(files_train)*10000,32,32,3))
+    X_train = X_train.reshape((len(files_train)*10000,3,32,32))
     Y_train = np.eye(10)[Y_train.astype(int)]
 
-    X_test = X_test.reshape((len(files_test) * 10000, 32, 32, 3))
+    X_test = X_test.reshape((len(files_test) * 10000, 3, 32, 32))
     Y_test = np.eye(10)[Y_test.astype(int)]
 
-    return X_train , Y_train, X_test,Y_test
+    return X_train.transpose([0, 2, 3, 1]) , Y_train , X_test.transpose([0, 2, 3, 1]) ,Y_test
 
 
 def create_placeholders(n_H,n_W,n_C,n_y):
@@ -68,9 +68,9 @@ def prepare_params(X_train,X_test):
     m_train,n_H_train,n_W_train,n_C_train=X_train.shape
     X_train,Y_train=create_placeholders(n_H_train,n_W_train,n_C_train,10)
 
-
-    m_test,n_H_test,n_W_test,n_C_test=X_test.shape
-    X_test, Y_test = create_placeholders(n_H_test, n_W_test, n_C_test, 10)
+    #
+    # m_test,n_H_test,n_W_test,n_C_test=X_test.shape
+    # X_test, Y_test = create_placeholders(n_H_test, n_W_test, n_C_test, 10)
 
     weights = {
         'W1':W1,
@@ -78,7 +78,8 @@ def prepare_params(X_train,X_test):
         'W3': W3,
         'W4':W4
     }
-    return X_train,Y_train,X_test,Y_test,weights
+    # return X_train,Y_train,X_test,Y_test,weights
+    return X_train,Y_train,weights
 
 
 def compute_cost(Z3,Y):
@@ -178,7 +179,8 @@ def main():
 
     ops.reset_default_graph()
 
-    X_train, Y_train, X_test, Y_test, weights = prepare_params(X_train_origin, X_test_origin)
+    # X_train, Y_train, X_test, Y_test, weights = prepare_params(X_train_origin, X_test_origin)
+    X_train, Y_train, weights = prepare_params(X_train_origin, X_test_origin)
 
     keep_prob = tf.placeholder(tf.float32)
 
