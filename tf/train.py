@@ -6,83 +6,11 @@ import math
 import time
 import os
 import random
-files_train = {"../train/data/data_batch_1", "../train/data/data_batch_2", "../train/data/data_batch_3",
-               "../train/data/data_batch_4", "../train/data/data_batch_5"}
-files_test = {"../train/data/test_batch"}
+import data_process as dp
 
 _keep_rate = 0.5
 _iter = 10000
 _lr = 0.0001
-
-
-def _random_crop(batch, crop_shape, padding=None):
-    oshape = np.shape(batch[0])
-
-    if padding:
-        oshape = (oshape[0] + 2 * padding, oshape[1] + 2 * padding)
-    new_batch = []
-    npad = ((padding, padding), (padding, padding), (0, 0))
-    for i in range(len(batch)):
-        new_batch.append(batch[i])
-        if padding:
-            new_batch[i] = np.lib.pad(batch[i], pad_width=npad,
-                                      mode='constant', constant_values=0)
-        nh = random.randint(0, oshape[0] - crop_shape[0])
-        nw = random.randint(0, oshape[1] - crop_shape[1])
-        new_batch[i] = new_batch[i][nh:nh + crop_shape[0],
-                       nw:nw + crop_shape[1]]
-    return new_batch
-
-
-def _random_flip_leftright(batch):
-    for i in range(len(batch)):
-        if bool(random.getrandbits(1)):
-            batch[i] = np.fliplr(batch[i])
-    return batch
-
-def data_augmentation(batch):
-    batch = _random_flip_leftright(batch)
-    batch = _random_crop(batch, [32,32], 4)
-    return batch
-
-def loadData():
-    X_train = np.zeros((len(files_train) * 10000, 3072))
-    Y_train = np.zeros((len(files_train) * 10000))
-
-    X_test = np.zeros((len(files_test) * 10000, 3072))
-    Y_test = np.zeros((len(files_test) * 10000))
-
-    def unpickle(file):
-        import pickle
-        with open(file, 'rb') as fo:
-            dict = pickle.load(fo, encoding='bytes')
-        return dict
-
-    for index, file in enumerate(files_train):
-        A = unpickle(file)
-        start = index * 10000
-        end = (index + 1) * 10000
-        X_train[start:end, :] = A[b'data']
-        Y_train[start:end] = A[b'labels']
-
-    for index, file in enumerate(files_test):
-        A = unpickle(file)
-        start = index * 10000
-        end = (index + 1) * 10000
-        X_test[start:end, :] = A[b'data']
-        Y_test[start:end] = A[b'labels']
-
-    X_train = X_train / 255
-    X_test = X_test / 255
-
-    # reshape and one hot data
-    X_train = X_train.reshape((len(files_train) * 10000, 3, 32, 32))
-    Y_train = np.eye(10)[Y_train.astype(int)]
-
-    X_test = X_test.reshape((len(files_test) * 10000, 3, 32, 32))
-    Y_test = np.eye(10)[Y_test.astype(int)]
-
-    return X_train.transpose([0, 2, 3, 1]), Y_train, X_test.transpose([0, 2, 3, 1]), Y_test
 
 
 def create_placeholders(n_H, n_W, n_C, n_y):
@@ -138,64 +66,6 @@ def fc(input,dropout,is_dropout=True):
     return output
 
 
-# GRADED FUNCTION: random_mini_batches
-
-def random_mini_batches(X, Y, mini_batch_size=64):
-    m = X.shape[0]  # number of training examples
-    mini_batches = []
-
-    # Step 1: Shuffle (X, Y)
-    permutation = list(np.random.permutation(m))
-    shuffled_X = X[permutation, :]
-    shuffled_Y = Y[permutation, :]
-    # Step 2: Partition (shuffled_X, shuffled_Y). Minus the end case.
-    num_complete_minibatches = math.floor(
-        m / mini_batch_size)  # number of mini batches of size mini_batch_size in your partitionning
-    for k in range(0, num_complete_minibatches):
-        ### START CODE HERE ### (approx. 2 lines)
-        mini_batch_X = shuffled_X[k * mini_batch_size:(k + 1) * mini_batch_size, :]
-        mini_batch_Y = shuffled_Y[k * mini_batch_size:(k + 1) * mini_batch_size, :]
-        ### END CODE HERE ###
-        mini_batch = (mini_batch_X, mini_batch_Y)
-        mini_batches.append(mini_batch)
-    # Handling the end case (last mini-batch < mini_batch_size)
-    if m % mini_batch_size != 0:
-        ### START CODE HERE ### (approx. 2 lines)
-        # end = m - mini_batch_size * math.floor(m / mini_batch_size)
-        mini_batch_X = shuffled_X[num_complete_minibatches * mini_batch_size:, :]
-        mini_batch_Y = shuffled_Y[num_complete_minibatches * mini_batch_size:, :]
-        ### END CODE HERE ###
-        mini_batch = (mini_batch_X, mini_batch_Y)
-        mini_batches.append(mini_batch)
-
-    return mini_batches
-
-
-def append_data(trains, tests, train_accuracy, test_accuracy):
-    trains = np.append(trains, train_accuracy)
-    tests = np.append(tests, test_accuracy)
-    return trains, tests
-
-
-
-def ensure_dir(dirs):
-    for dir in dirs:
-        if not os.path.exists(dir):
-            with open(dir, 'w'): pass
-
-
-def load_txt(cost_dir, train_dir, test_dir):
-    costs = np.loadtxt(cost_dir, dtype=float)
-    trains = np.loadtxt(train_dir, dtype=float)
-    tests = np.loadtxt(test_dir, dtype=float)
-    return costs, trains, tests
-
-
-def save_txt(costs, trains, tests, cost_dir, train_dir, test_dir):
-    np.savetxt(cost_dir, costs, fmt='%1.16f')
-    np.savetxt(train_dir, trains, fmt='%1.16f')
-    np.savetxt(test_dir, tests, fmt='%1.16f')
-
 
 def predict(X_train_origin, Y_train_origin, X_test_origin, Y_test_origin, output, X_train, Y_train, keep_prob):
     predict_op = tf.argmax(output, 1)
@@ -211,7 +81,7 @@ def predict(X_train_origin, Y_train_origin, X_test_origin, Y_test_origin, output
 
 
 def main():
-    X_train_origin, Y_train_origin, X_test_origin, Y_test_origin = loadData()
+    X_train_origin, Y_train_origin, X_test_origin, Y_test_origin = dp.loadData()
 
     ops.reset_default_graph()
 
@@ -228,8 +98,8 @@ def main():
     minibatch_size = 64
 
     # load data from txt
-    ensure_dir(['data/costs.txt', 'data/trains.txt', 'data/tests.txt'])
-    costs, trains, tests = load_txt('data/costs.txt', 'data/trains.txt', 'data/tests.txt')
+    dp.ensure_dir(['data/costs.txt', 'data/trains.txt', 'data/tests.txt'])
+    costs, trains, tests = dp.load_txt('data/costs.txt', 'data/trains.txt', 'data/tests.txt')
 
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
@@ -247,11 +117,11 @@ def main():
 
             minibatch_cost = 0
             num_minibatches = int(m / minibatch_size)
-            minibatches = random_mini_batches(X_train_origin, Y_train_origin, minibatch_size)
+            minibatches = dp.random_mini_batches(X_train_origin, Y_train_origin, minibatch_size)
 
             for minibatch in minibatches:
                 (minibatch_X, minibatch_Y) = minibatch
-                minibatch_X=data_augmentation(minibatch_X)
+                minibatch_X=dp.data_augmentation(minibatch_X)
                 _, temp_cost = sess.run([optimizer, cost],feed_dict={X_train: minibatch_X, Y_train: minibatch_Y, keep_prob: _keep_rate})
                 minibatch_cost += temp_cost / num_minibatches
 
@@ -266,10 +136,10 @@ def main():
                 train_accuracy, test_accuracy = predict(X_train_origin, Y_train_origin, X_test_origin, Y_test_origin,
                                                         output, X_train, Y_train, keep_prob)
 
-                trains, tests = append_data(trains, tests, train_accuracy, test_accuracy)
+                trains, tests = dp.append_data(trains, tests, train_accuracy, test_accuracy)
 
                 # save data to txt
-                save_txt(costs, trains, tests, 'data/costs.txt', 'data/trains.txt', 'data/tests.txt')
+                dp.save_txt(costs, trains, tests, 'data/costs.txt', 'data/trains.txt', 'data/tests.txt')
                 print("cost after {} iters : {} in {} each with train accuracy = {} and test accuracy = {} ".format(i,
                                                                                                                     minibatch_cost,
                                                                                                                     total_time,
@@ -278,7 +148,6 @@ def main():
 
         print("Train Accuracy:", train_accuracy)
         print("Test Accuracy:", test_accuracy)
-
 
 if __name__ == "__main__":
     main()
