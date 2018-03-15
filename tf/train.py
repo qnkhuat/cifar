@@ -135,10 +135,9 @@ def main():
     with tf.Session(config=tf.ConfigProto(log_device_placement=False)) as sess:
         sess.run(init)
         merged = tf.summary.merge_all()
-        
-        train_writer = tf.summary.FileWriter('graph/2' + '/train',
+        train_writer = tf.summary.FileWriter('graph/3' + '/train',
                                       sess.graph)
-        test_writer = tf.summary.FileWriter('graph/2' + '/test')
+        test_writer = tf.summary.FileWriter('graph/3' + '/test')
 
         try:
             ckpt = tf.train.get_checkpoint_state('./checkpoint/')

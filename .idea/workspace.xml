@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd98d4ae-6742-4c2a-9e58-86fe36e06d29" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tf/checkpoint/checkpoint" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tf/checkpoint/model.ckpt-1.data-00000-of-00001" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tf/checkpoint/model.ckpt-1.index" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/tf/checkpoint/model.ckpt-1.meta" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tf/data_process.py" afterPath="$PROJECT_DIR$/tf/data_process.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tf/train.py" afterPath="$PROJECT_DIR$/tf/train.py" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/tensorflow-mnist-tutorial/mnist_1.0_softmax.py" afterPath="$USER_HOME$/tensorflow-mnist-tutorial/mnist_1.0_softmax.py" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/tensorflow-mnist-tutorial/mnist_2.0_five_layers_sigmoid.py" afterPath="$USER_HOME$/tensorflow-mnist-tutorial/mnist_2.0_five_layers_sigmoid.py" />
@@ -46,32 +51,8 @@
       <file leaf-file-name="train.py" pinned="true" current-in-tab="true">
         <entry file="remoteDeploymentFS://&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/cifar/tf/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="114" column="34" lean-forward="true" selection-start-line="114" selection-start-column="34" selection-end-line="114" selection-end-column="34" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="train_graph.py" pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/cifar/tf/train_graph.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="121" column="0" lean-forward="true" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="data_process.py" pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;75aa5c94-c016-42ec-8777-1537ce46ca5a&gt;/cifar/tf/data_process.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="123" column="21" lean-forward="true" selection-start-line="123" selection-start-column="4" selection-end-line="123" selection-end-column="21" />
+            <state relative-caret-position="1827">
+              <caret line="191" column="10" lean-forward="false" selection-start-line="191" selection-start-column="10" selection-end-line="191" selection-end-column="10" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>

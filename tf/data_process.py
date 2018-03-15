@@ -37,7 +37,11 @@ def _random_flip_leftright(batch):
         if bool(random.getrandbits(1)):
             batch[i] = np.fliplr(batch[i])
     return batch
-
+def unpickle(file):
+    import pickle
+    with open(file, 'rb') as fo:
+        dict = pickle.load(fo, encoding='bytes')
+    return dict
 
 def loadData():
     X_train = np.zeros((len(files_train) * 10000, 3072))
@@ -45,12 +49,6 @@ def loadData():
 
     X_test = np.zeros((len(files_test) * 10000, 3072))
     Y_test = np.zeros((len(files_test) * 10000))
-
-    def unpickle(file):
-        import pickle
-        with open(file, 'rb') as fo:
-            dict = pickle.load(fo, encoding='bytes')
-        return dict
 
     for index, file in enumerate(files_train):
         A = unpickle(file)
@@ -127,16 +125,14 @@ def ensure_dir(dirs):
             with open(dir, 'w'): pass
 
 
-def load_txt(cost_dir, train_dir, test_dir):
-    costs = np.loadtxt(cost_dir, dtype=float)
-    trains = np.loadtxt(train_dir, dtype=float)
-    tests = np.loadtxt(test_dir, dtype=float)
+def load_txt(cache_files_name):
+    costs = np.loadtxt(cache_files_name[0], dtype=float)
+    trains = np.loadtxt(cache_files_name[1], dtype=float)
+    tests = np.loadtxt(cache_files_name[2], dtype=float)
     return costs, trains, tests
 
 
-def save_txt(costs, trains, tests, cost_dir, train_dir, test_dir):
-    np.savetxt(cost_dir, costs, fmt='%1.16f')
-    np.savetxt(train_dir, trains, fmt='%1.16f')
-    np.savetxt(test_dir, tests, fmt='%1.16f')
-
-
+def save_txt(costs, trains, tests, cache_files_name):
+    np.savetxt(cache_files_name[0], costs, fmt='%1.16f')
+    np.savetxt(cache_files_name[1], trains, fmt='%1.16f')
+    np.savetxt(cache_files_name[2], tests, fmt='%1.16f')
