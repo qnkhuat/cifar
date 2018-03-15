@@ -109,8 +109,9 @@ def main():
     minibatch_size = 64
 
     # load data from txt
-    dp.ensure_dir(['data/costs.txt', 'data/trains.txt', 'data/tests.txt'])
-    costs, trains, tests = dp.load_txt('data/costs.txt', 'data/trains.txt', 'data/tests.txt')
+    cache_files_name=['data/costs.txt', 'data/trains.txt', 'data/tests.txt']
+    dp.ensure_dir(cache_files_name)
+    costs, trains, tests = dp.load_txt(cache_files_name)
 
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
@@ -119,8 +120,6 @@ def main():
         sess.run(init)
         merged = tf.summary.merge_all()
         writer = tf.summary.FileWriter('graph/8',sess.graph)
-
-
 
         try:
             ckpt = tf.train.get_checkpoint_state('./checkpoint/')
@@ -158,7 +157,7 @@ def main():
                 trains, tests = dp.append_data(trains, tests, train_accuracy, test_accuracy)
 
                 # save data to txt
-                dp.save_txt(costs, trains, tests, 'data/costs.txt', 'data/trains.txt', 'data/tests.txt')
+                dp.save_txt(costs, trains, tests,cache_files_name)
                 print("cost after {} iters : {} in {} each with train accuracy = {} and test accuracy = {} ".format(i,
                                                                                                                     minibatch_cost,
                                                                                                                     total_time,
