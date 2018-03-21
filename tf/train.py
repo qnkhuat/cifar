@@ -45,39 +45,51 @@ def var_summary(var):
         tf.summary.histogram('histogram', var)
 
 
-def conv(name, X_train, in_c, out_c, strides=2, is_max_pool=False):
+def conv(name, X_train, in_c, out_c, is_max_pool=False):
     name_scope = 'conv_max' if is_max_pool else 'conv'
 
     with tf.name_scope(name_scope):
         with tf.name_scope('weights'):
-            W = tf.get_variable('W' + name, [4, 4, in_c, out_c], initializer=tf.contrib.layers.xavier_initializer())
+            W = tf.get_variable('W' + name, [3, 3, in_c, out_c], initializer=tf.contrib.keras.initializers.he_normal())
             var_summary(W)
         with tf.name_scope('biases'):
             b = tf.get_variable('b' + name, [out_c], initializer=tf.constant_initializer(0.1))
             var_summary(b)
 
-        Z = tf.nn.conv2d(X_train, W, strides=[1, strides, strides, 1], padding='SAME')
+        Z = tf.nn.conv2d(X_train, W, strides=[1, 2, 2, 1], padding='SAME')
         pre_activation = tf.nn.bias_add(Z, b)
         batch_norm = tf.contrib.layers.batch_norm(pre_activation, decay=0.9, center=True, scale=True, epsilon=1e-3,
                                                   updates_collections=None)
         out = tf.nn.relu(batch_norm)
 
         if is_max_pool:
-            out = tf.nn.max_pool(out, ksize=[1, 2, 2, 1], strides=[1, strides, strides, 1], padding='SAME')
+            out = tf.nn.max_pool(out, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
     return out
 
 
-def fc(activation, dropout, is_dropout=True):
+def fc(input,dropout,is_dropout=True):
     with tf.name_scope('fc'):
-        output = tf.contrib.layers.flatten(activation)
+        output = tf.contrib.layers.flatten(input)
         if is_dropout:
-            output = tf.nn.dropout(output, dropout)
-        output = tf.contrib.layers.fully_connected(output, 2048, activation_fn=None)
+            output = tf.nn.dropout(output,dropout)
         output = tf.contrib.layers.fully_connected(output, 1024, activation_fn=None)
         output = tf.contrib.layers.fully_connected(output, 10, activation_fn=None)
     return output
 
+
+def fc_vgg(activation,out_c, dropout, is_dropout=True,is_activate=True):
+    if is_activate:
+        activate=tf.nn.relu
+    else:
+        activate=None
+
+    with tf.name_scope('fc'):
+        output = tf.contrib.layers.flatten(activation)
+        if is_dropout:
+            output = tf.nn.dropout(output, dropout)
+        output = tf.contrib.layers.fully_connected(output, out_c, activation_fn=activate)
+    return output
 
 def forward_prop(X_train, dropout):
     convs = conv('1', X_train, 3, 8)
@@ -92,8 +104,17 @@ def forward_prop(X_train, dropout):
     convs = conv('7', convs, 256, 512)
     convs = conv('8', convs, 512, 512, is_max_pool=True)
 
-    output = fc(convs, dropout)
+    convs = conv('9', convs, 512, 512)
+    convs = conv('10', convs, 512, 512, is_max_pool=True)
 
+
+    # output = fc(conv6, dropout)
+    #
+    # fc1 = fc_vgg(convs,4096,dropout)
+    # fc2 = fc_vgg(fc1, 4096, dropout)
+
+    fc3 = fc_vgg(convs, 10, dropout,is_dropout=False,is_activate=False)
+    output=tf.nn.softmax(fc3)
     return output
 
 
@@ -106,26 +127,30 @@ def predict(Y, output):
 
 
 def main():
+
     X_train_origin, Y_train_origin, X_test_origin, Y_test_origin = dp.loadData()
+    X_train_origin,X_test_origin=dp.data_preprocessing(X_train_origin,X_test_origin)
 
     ops.reset_default_graph()
 
     X, Y = prepare_params(X_train_origin)
 
     keep_prob = tf.placeholder(tf.float32)
+    learning_rate = tf.placeholder(tf.float32)
 
     output = forward_prop(X, keep_prob)
     cost = compute_cost(output, Y)
 
     with tf.name_scope('train'):
-        optimizer = tf.train.AdamOptimizer(learning_rate=_lr).minimize(cost)
+        optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
 
     with tf.name_scope('accuracy'):
         accuracy = predict(Y, output)
+
     tf.summary.scalar('accuracy', accuracy)
 
     m = X_train_origin.shape[0]
-    minibatch_size = 64
+    minibatch_size = 32
 
     # load data from txt
     cache_files_name = ['data/costs.txt', 'data/trains.txt', 'data/tests.txt']
@@ -146,10 +171,19 @@ def main():
         try:
             ckpt = tf.train.get_checkpoint_state('./checkpoint/')
             saver.restore(sess, ckpt.model_checkpoint_path)
+            print("Haha I found a checkpoint.")
         except:
-            print("No checkpoint found")
+            print("No checkpoint found.")
 
         for i in range(_iter):
+            global _lr
+            if i>=10:
+                lr=_lr/2
+            elif i>=100:
+                lr=_lr=10
+            else :
+                lr = _lr
+
             start_time = time.time()
 
             minibatch_cost = 0
@@ -159,8 +193,8 @@ def main():
             for minibatch in minibatches:
                 (minibatch_X, minibatch_Y) = minibatch
                 minibatch_X = dp.data_augmentation(minibatch_X)
-                _, temp_cost = sess.run([optimizer, cost],
-                                        feed_dict={X: minibatch_X, Y: minibatch_Y, keep_prob: _keep_rate})
+                _, temp_cost = sess.run([optimizer, cost],feed_dict={X: minibatch_X, Y: minibatch_Y, keep_prob: _keep_rate,learning_rate:lr})
+
                 minibatch_cost += temp_cost / num_minibatches
 
             costs = np.append(costs, minibatch_cost)

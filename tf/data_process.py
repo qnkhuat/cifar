@@ -37,6 +37,7 @@ def _random_flip_leftright(batch):
         if bool(random.getrandbits(1)):
             batch[i] = np.fliplr(batch[i])
     return batch
+
 def unpickle(file):
     import pickle
     with open(file, 'rb') as fo:
@@ -64,8 +65,6 @@ def loadData():
         X_test[start:end, :] = A[b'data']
         Y_test[start:end] = A[b'labels']
 
-    X_train = X_train / 255
-    X_test = X_test / 255
 
     # reshape and one hot data
     X_train = X_train.reshape((len(files_train) * 10000, 3, 32, 32))
@@ -76,6 +75,20 @@ def loadData():
 
     return X_train.transpose([0, 2, 3, 1]), Y_train, X_test.transpose([0, 2, 3, 1]), Y_test
 
+def data_preprocessing(x_train,x_test):
+
+    x_train = x_train.astype('float32')
+    x_test = x_test.astype('float32')
+
+    x_train[:,:,:,0] = (x_train[:,:,:,0] - np.mean(x_train[:,:,:,0])) / np.std(x_train[:,:,:,0])
+    x_train[:,:,:,1] = (x_train[:,:,:,1] - np.mean(x_train[:,:,:,1])) / np.std(x_train[:,:,:,1])
+    x_train[:,:,:,2] = (x_train[:,:,:,2] - np.mean(x_train[:,:,:,2])) / np.std(x_train[:,:,:,2])
+
+    x_test[:,:,:,0] = (x_test[:,:,:,0] - np.mean(x_test[:,:,:,0])) / np.std(x_test[:,:,:,0])
+    x_test[:,:,:,1] = (x_test[:,:,:,1] - np.mean(x_test[:,:,:,1])) / np.std(x_test[:,:,:,1])
+    x_test[:,:,:,2] = (x_test[:,:,:,2] - np.mean(x_test[:,:,:,2])) / np.std(x_test[:,:,:,2])
+
+    return x_train, x_test
 
 def data_augmentation(batch):
     batch = _random_flip_leftright(batch)
