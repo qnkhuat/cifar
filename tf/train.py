@@ -50,7 +50,7 @@ def conv(name, X_train, in_c, out_c, is_max_pool=False):
 
     with tf.name_scope(name_scope):
         with tf.name_scope('weights'):
-            W = tf.get_variable('W' + name, [3, 3, in_c, out_c], initializer=tf.contrib.keras.initializers.he_normal())
+            W = tf.get_variable('W' + name, [4, 4, in_c, out_c], initializer=tf.contrib.keras.initializers.he_normal())
             var_summary(W)
         with tf.name_scope('biases'):
             b = tf.get_variable('b' + name, [out_c], initializer=tf.constant_initializer(0.1))
@@ -69,12 +69,11 @@ def conv(name, X_train, in_c, out_c, is_max_pool=False):
 
 
 def fc(input,dropout,is_dropout=True):
-    with tf.name_scope('fc'):
-        output = tf.contrib.layers.flatten(input)
-        if is_dropout:
-            output = tf.nn.dropout(output,dropout)
-        output = tf.contrib.layers.fully_connected(output, 1024, activation_fn=None)
-        output = tf.contrib.layers.fully_connected(output, 10, activation_fn=None)
+    output = tf.contrib.layers.flatten(input)
+    if is_dropout:
+        output = tf.nn.dropout(output,dropout)
+    output = tf.contrib.layers.fully_connected(output, 1024, activation_fn=None)
+    output = tf.contrib.layers.fully_connected(output, 10, activation_fn=None)
     return output
 
 
@@ -92,20 +91,22 @@ def fc_vgg(activation,out_c, dropout, is_dropout=True,is_activate=True):
     return output
 
 def forward_prop(X_train, dropout):
-    convs = conv('1', X_train, 3, 8)
-    convs = conv('2', convs, 8, 16, is_max_pool=True)
+    conv1 = conv('W1', X_train, 3, 8)
+    conv2 = conv('W2', conv1, 8, 16, is_max_pool=True)
 
-    convs = conv('3', convs, 16, 32)
-    convs = conv('4', convs, 32, 64, is_max_pool=True)
+    conv3 = conv('W3', conv2, 16, 32)
+    conv4 = conv('W4', conv3, 32, 64, is_max_pool=True)
 
-    convs = conv('5', convs, 64, 128)
-    convs = conv('6', convs, 128, 256, is_max_pool=True)
+    conv5 = conv('W5', conv4, 64, 128)
+    conv6 = conv('W6', conv5, 128, 256, is_max_pool=True)
 
-    convs = conv('7', convs, 256, 512)
-    convs = conv('8', convs, 512, 512, is_max_pool=True)
+    output = fc(conv6, dropout)
 
-    convs = conv('9', convs, 512, 512)
-    convs = conv('10', convs, 512, 512, is_max_pool=True)
+    # convs = conv('7', convs, 256, 512)
+    # convs = conv('8', convs, 512, 512, is_max_pool=True)
+    #
+    # convs = conv('9', convs, 512, 512)
+    # convs = conv('10', convs, 512, 512, is_max_pool=True)
 
 
     # output = fc(conv6, dropout)
@@ -113,8 +114,8 @@ def forward_prop(X_train, dropout):
     # fc1 = fc_vgg(convs,4096,dropout)
     # fc2 = fc_vgg(fc1, 4096, dropout)
 
-    fc3 = fc_vgg(convs, 10, dropout,is_dropout=False,is_activate=False)
-    output=tf.nn.softmax(fc3)
+    # fc3 = fc(convs, dropout)
+    # output=tf.nn.softmax(fc3)
     return output
 
 
